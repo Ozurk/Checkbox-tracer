@@ -1,41 +1,46 @@
 import pyautogui as pya
 import time
-time.sleep(1.5)
+import pyscreeze
+time.sleep(2)
 
-def textboxMaker():
-    all_textboxes = list(pya.locateAllOnScreen("pics/pipe.png", confidence = .88))
-    counter = 0
-    pya.moveTo(all_textboxes[counter])
-    pya.moveRel(-78, -19)
+
+def textbox_maker():
+    all_textboxes = list(pya.locateAllOnScreen("pics/target.png", confidence=.86))  # set confidence here
+
+    textbox = all_textboxes[0]
+    height = textbox.height
+    width = textbox.width
+
+    pya.moveTo(textbox.left + 2, textbox.top + 2)
     pya.click()
-    pya.dragRel(80,20, .5)
+    pya.dragTo(textbox.left + width, textbox.top + height, 3, pya.easeOutQuad)
+    # set over or under shoot above
     time.sleep(.5)
-    pya.moveTo(pya.locateCenterOnScreen("pics/height.png",grayscale = True, confidence = .8))
-    pya.moveRel(-40,0)
-    pya.click()
-    pya.press("backspace")
-    pya.press("backspace")
-    pya.press("backspace")
-    pya.write("14")
-    pya.moveTo(pya.locateCenterOnScreen("pics/width.png", confidence = .8))
-    pya.moveRel(-40,0)
-    pya.click()
-    pya.press("backspace")
-    pya.press("backspace")
-    pya.press("backspace")
-    pya.write("60")
-    pya.moveTo(pya.locateOnScreen("ok.png", confidence = .8))
+
+    pya.moveTo(pya.locateOnScreen("pics/ok.png", confidence=.7))
     pya.click()
     for textboxes in all_textboxes:
         print(textboxes)
-        textboxMaker()
-        counter += 1
-        
+        textbox_maker()
 
-    
 
-textboxMaker()
-    
+attempts = 0
+while attempts < 20:
+    try:
+        textbox_maker()
+    except pyscreeze.ImageNotFoundException:
+        pya.scroll(-200)
+        attempts += 1
+        print("Attempt number: "+ str(attempts) + " \nWill quit after 20 failed attempts")
+        time.sleep(1)
+    except pya.ImageNotFoundException:
+        pya.scroll(-200)
+        attempts += 1
+        print("Attempt number: " + str(attempts) + " \nWill quit after 20 failed attempts")
+        time.sleep(1)
+    except pya.FailSafeException:
+        print("fail safe was triggered.")
+
     
     
 
