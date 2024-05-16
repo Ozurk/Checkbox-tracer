@@ -13,4 +13,6 @@ To use this program:
 The confidence for which the program recognized the picture can be changed.
 The distance the program over or undershoots the target distance can be changed.
 
+Due to the nature of the program, you will not be able to use the mouse while the program is running. Pyautogui has a built-in failsafe.
+  To force quit the program, "slam" the cursor into the top right or top left corner of the screen.
 
