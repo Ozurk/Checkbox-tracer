@@ -6,9 +6,9 @@ To use this program:
 2: Using the snipping tool, save a picture of the field area that it will look for. IE: Each form field has |_________| where the field will go.
 3: Save the picture as target.png within the pics subfolder
 4: Make sure the "forms" tab is selected within the PDF editor.
-5: Run the program, it should draw a box then crash with the "ImageNotFoundException". 
-6: Using the Snipping tool, save a screenshot of the blue "Ok" button.
-7: Press Ok, then Restart the program.
+5: Draw a textbox by hand
+6: Using the Snipping tool, save a screenshot of the blue "Ok" button. Save it as ok.png in the pics folder
+7: Run the program
 
 The confidence for which the program recognized the picture can be changed.
 The distance the program over or undershoots the target distance can be changed.
