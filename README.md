@@ -4,13 +4,15 @@ This program uses pyautogui to look for all instances of an image on the screen 
 To use this program: 
 1: Make sure there is a recognizable pattern for the program to follow. It matches pixels, so it is very sensitive.
 2: Using the snipping tool, save a picture of the field area that it will look for. IE: Each form field has |_________| where the field will go.
-3: Save the picture as pipe.png within the pics subfolder
+3: Save the picture as target.png within the pics subfolder
 4: Make sure the "forms" tab is selected within the PDF editor.
-5: Run the program, it should draw a box then crash with the "ImageNotFoundException". 
-6: Using the Snipping tool, save a screenshot of the blue "Ok" button.
-7: Press Ok, then Restart the program.
+5: Draw a textbox by hand
+6: Using the Snipping tool, save a screenshot of the blue "Ok" button. Save it as ok.png in the pics folder
+7: Run the program
 
 The confidence for which the program recognized the picture can be changed.
 The distance the program over or undershoots the target distance can be changed.
 
+Due to the nature of the program, you will not be able to use the mouse while the program is running. Pyautogui has a built-in failsafe.
+  To force quit the program, "slam" the cursor into the top right or top left corner of the screen.
 
