@@ -80,7 +80,7 @@ def start_textbox_maker(event=None):
                 print("Attempt number: " + str(attempts) + " \nWill quit after 25 failed attempts")
                 time.sleep(.25)
     except ValueError:
-        messagebox.showerror("error", "please enter a valid percentage.")
+        messagebox.showerror("error", "please enter the confidence percentage.\n(Hint: 90)")
 
 
 def force_quit():
@@ -107,7 +107,7 @@ overshoot_width = tkinter.Entry(root)
 overshoot_width.pack()
 start_button = tkinter.Button(root, text="Start", command=start_textbox_maker)
 start_button.pack()
-force_quit_button = tkinter.Button(root, text="Force Quit", command=force_quit, bg='red', fg='white')
+force_quit_button = tkinter.Label(root, text="Created By Hunter Metzger", bg='black', fg='white', anchor=tkinter.SW)
 force_quit_button.pack()
 
 root.bind('<Return>', start_textbox_maker)
