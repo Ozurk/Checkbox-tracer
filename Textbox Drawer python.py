@@ -50,9 +50,10 @@ def textbox_maker():
     height = textbox.height
     width = textbox.width
 
-    pya.moveTo(textbox.left + int(overshoot_width.get()), textbox.top + int(overshoot_height.get()))
+    pya.moveTo((textbox.left + 3), textbox.top)
     pya.click()
-    pya.dragTo(textbox.left + width, textbox.top + height, 3, pya.easeOutQuad)
+    pya.dragTo(textbox.left + width + int(overshoot_width.get()), textbox.top + height + int(overshoot_height.get()),
+               3, pya.easeOutQuad)
     # set over or under shoot above
     time.sleep(.5)
 
