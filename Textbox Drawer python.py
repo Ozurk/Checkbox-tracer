@@ -46,10 +46,13 @@ def save_target_image():
 
 class TextBoxDrawer:
     def __init__(self):
+        self.overshoot_height_variable = None
+        self.speed_variable = None
+        self.header = None
         self.speed = None
         self.overshoot_height_entry = None
         self.main_frame = None
-        self.overshoot_width = None
+        self.overshoot_width_entry = None
         self.overshoot_height = None
         self.confidence_entry = None
         self.ok_image = None
@@ -59,13 +62,15 @@ class TextBoxDrawer:
 
     def create_application(self):
         self.root = tkinter.Tk()
+        self.root.resizable(False, False)
         self.root.title('Build-Ops Form Field creator')
         self.root.iconbitmap("pics/logo.ico")
         core_logo = Image.open("pics/logo.gif")
         core_logo_copy = core_logo
         core_image = ImageTk.PhotoImage(core_logo_copy)
-        header = tkinter.Label(self.root, image=core_image)
-        header.pack()
+        self.header = tkinter.Label(self.root, image=core_image, bg="#ffffff")
+        self.header.image = core_image
+        self.header.pack(fill="x")
         self.main_frame = tkinter.Frame(self.root, bg="#a8a8a8")
 
         self.main_frame.rowconfigure(0, weight=1)
@@ -93,26 +98,27 @@ class TextBoxDrawer:
                                                 justify=tkinter.CENTER)
         self.confidence_entry.grid(row=2, column=0, columnspan=2, padx=10, pady=10)
 
-        overshoot_height_variable = tkinter.StringVar()
-        overshoot_height_variable.set("0")
+        self.overshoot_height_variable = tkinter.StringVar()
+        self.overshoot_height_variable.set("0")
         overshoot_height_label = tkinter.Label(self.main_frame, text="Enter the overshoot height distance in pixels")
         overshoot_height_label.grid(row=3, column=0, columnspan=2, sticky=tkinter.NSEW)
 
         self.overshoot_height_entry = tkinter.Spinbox(self.main_frame, from_=0, to=100, increment=1,
-                                                      textvariable=overshoot_height_variable,
+                                                      textvariable=self.overshoot_height_variable,
                                                       justify=tkinter.CENTER)
         self.overshoot_height_entry.grid(row=4, column=0, columnspan=2, padx=10, pady=10)
 
         overshoot_width_label = tkinter.Label(self.main_frame, text="Enter the overshoot width distance in pixels")
         overshoot_width_label.grid(row=5, column=0, columnspan=2, sticky=tkinter.NSEW)
-        self.overshoot_width = tkinter.Spinbox(self.main_frame, from_=0, to=100, increment=1, justify=tkinter.CENTER)
-        self.overshoot_width.grid(row=6, column=0, columnspan=2, padx=10, pady=10)
+        self.overshoot_width_entry = tkinter.Spinbox(self.main_frame, from_=0, to=100, increment=1,
+                                                     justify=tkinter.CENTER)
+        self.overshoot_width_entry.grid(row=6, column=0, columnspan=2, padx=10, pady=10)
 
         speed_label = tkinter.Label(self.main_frame, text="Enter the time (in seconds each box is 'drawn')")
         speed_label.grid(row=7, column=0, columnspan=2, sticky=tkinter.NSEW)
-        speed_variable = tkinter.StringVar()
-        speed_variable.set("3")
-        self.speed = tkinter.Spinbox(self.main_frame, from_=.01, to=10, increment=.1, textvariable=speed_variable,
+        self.speed_variable = tkinter.StringVar()
+        self.speed_variable.set("3")
+        self.speed = tkinter.Spinbox(self.main_frame, from_=.01, to=10, increment=.1, textvariable=self.speed_variable,
                                      justify="center")
         self.speed.grid(row=8, column=0, columnspan=2, padx=10, pady=10)
 
@@ -132,19 +138,21 @@ class TextBoxDrawer:
         textbox = all_textboxes[0]
         height = textbox.height
         width = textbox.width
-
+        overshoot_height = int(self.overshoot_height_entry.get())
+        overshoot_width = int(self.overshoot_width_entry.get())
+        speed = float(self.speed.get())
+        print(textbox, height, width)
         pya.moveTo(textbox.left + 2, textbox.top)
         pya.click()
-        pya.dragTo(textbox.left + width + int(self.overshoot_width.get()),
-                   textbox.top + height + int(self.overshoot_height.get()),
-                   int(self.speed.get()), pya.easeOutQuad)
+        pya.dragTo(textbox.left + width + int(overshoot_width),
+                   textbox.top + height + int(overshoot_height),
+                   speed, pya.easeOutQuad)
         # set over or under shoot above
-        time.sleep(.5)
-
         pya.moveTo(pya.locateOnScreen("pics/ok.png", confidence=.8))
         pya.click()
         for textboxes in all_textboxes:
             print(textboxes)
+            print(overshoot_height, overshoot_width, speed)
             self.create_textbox()
 
     def run_mainloop(self):
@@ -168,10 +176,6 @@ class TextBoxDrawer:
                     time.sleep(.25)
         except ValueError:
             messagebox.showerror("error", "Please fill out all the fields.\n(Hint: 90)")
-
-
-def force_quit():
-    quit()
 
 
 if __name__ == "__main__":
