@@ -46,6 +46,7 @@ def save_target_image():
 
 class TextBoxDrawer:
     def __init__(self):
+        self.speed = None
         self.overshoot_height_entry = None
         self.main_frame = None
         self.overshoot_width = None
@@ -58,7 +59,13 @@ class TextBoxDrawer:
 
     def create_application(self):
         self.root = tkinter.Tk()
-        self.root.title('Textbox Maker GUI')
+        self.root.title('Build-Ops Form Field creator')
+        self.root.iconbitmap("pics/logo.ico")
+        core_logo = Image.open("pics/logo.gif")
+        core_logo_copy = core_logo
+        core_image = ImageTk.PhotoImage(core_logo_copy)
+        header = tkinter.Label(self.root, image=core_image)
+        header.pack()
         self.main_frame = tkinter.Frame(self.root, bg="#a8a8a8")
 
         self.main_frame.rowconfigure(0, weight=1)
@@ -67,11 +74,12 @@ class TextBoxDrawer:
         self.main_frame.pack()
 
         self.target_image = tkinter.Button(self.main_frame, text="Save Target Image From Clipboard",
-                                           command=save_target_image, relief="groove", borderwidth=5, bg="#84cc34")
+                                           command=save_target_image, borderwidth=5, bg="#84cc34",
+                                           font=("Cambria", 10, "bold"))
         self.target_image.grid(row=0, column=0, sticky=tkinter.NSEW, padx=10, pady=10)
 
         self.ok_image = tkinter.Button(self.main_frame, text="Save 'Ok' Image From Clipboard", command=save_ok_image,
-                                       relief="groove", borderwidth=5, bg="#84cc34")
+                                       borderwidth=5, bg="#84cc34", font=("Cambria", 10, "bold"))
         self.ok_image.grid(row=0, column=1, sticky=tkinter.NSEW, padx=10, pady=10)
 
         confidence_label = tkinter.Label(self.main_frame, text="Enter the confidence percentage for the target image:")
@@ -83,7 +91,7 @@ class TextBoxDrawer:
         self.confidence_entry = tkinter.Spinbox(self.main_frame, from_=50, to=100, increment=1,
                                                 textvariable=confidence_variable,
                                                 justify=tkinter.CENTER)
-        self.confidence_entry.grid(row=2, column=0, columnspan=2, sticky=tkinter.NSEW)
+        self.confidence_entry.grid(row=2, column=0, columnspan=2, padx=10, pady=10)
 
         overshoot_height_variable = tkinter.StringVar()
         overshoot_height_variable.set("0")
@@ -93,20 +101,29 @@ class TextBoxDrawer:
         self.overshoot_height_entry = tkinter.Spinbox(self.main_frame, from_=0, to=100, increment=1,
                                                       textvariable=overshoot_height_variable,
                                                       justify=tkinter.CENTER)
-        self.overshoot_height_entry.grid(row=4, column=0, columnspan=2, sticky=tkinter.NSEW)
+        self.overshoot_height_entry.grid(row=4, column=0, columnspan=2, padx=10, pady=10)
 
         overshoot_width_label = tkinter.Label(self.main_frame, text="Enter the overshoot width distance in pixels")
         overshoot_width_label.grid(row=5, column=0, columnspan=2, sticky=tkinter.NSEW)
         self.overshoot_width = tkinter.Spinbox(self.main_frame, from_=0, to=100, increment=1, justify=tkinter.CENTER)
-        self.overshoot_width.grid(row=6, column=0, columnspan=2, sticky=tkinter.NSEW)
+        self.overshoot_width.grid(row=6, column=0, columnspan=2, padx=10, pady=10)
 
-        start_button = tkinter.Button(self.main_frame, text="Start", command=self.start_textbox_maker)
-        start_button.grid(row=7, column=0, columnspan=2, sticky=tkinter.NSEW)
-        credits = tkinter.Label(self.main_frame, text="Created By Hunter Metzger", bg='black', fg='white',
-                                          anchor=tkinter.SW)
-        credits.grid(row=9, column=0, columnspan=2, sticky=tkinter.NSEW)
+        speed_label = tkinter.Label(self.main_frame, text="Enter the time (in seconds each box is 'drawn')")
+        speed_label.grid(row=7, column=0, columnspan=2, sticky=tkinter.NSEW)
+        speed_variable = tkinter.StringVar()
+        speed_variable.set("3")
+        self.speed = tkinter.Spinbox(self.main_frame, from_=.01, to=10, increment=.1, textvariable=speed_variable,
+                                     justify="center")
+        self.speed.grid(row=8, column=0, columnspan=2, padx=10, pady=10)
+
+        start_button = tkinter.Button(self.main_frame, text="Start", command=self.start_textbox_maker,
+                                      font=("Cambria", 20, "bold"), bg="#79B532", borderwidth=7)
+        start_button.grid(row=9, column=0, columnspan=2, sticky=tkinter.NSEW)
+        credit_hunter = tkinter.Label(self.main_frame, text="Created By Hunter Metzger", bg='black', fg='white',
+                                      anchor=tkinter.SW)
+        credit_hunter.grid(row=11, column=0, columnspan=2, sticky=tkinter.NSEW)
         help_button = tkinter.Button(self.main_frame, bitmap="question")
-        help_button.grid(self.main_frame, row=8)
+        help_button.grid(row=10, columnspan=2, sticky=tkinter.NSEW)
         self.main_frame.bind('<Return>', self.start_textbox_maker)
 
     def create_textbox(self):
@@ -120,7 +137,7 @@ class TextBoxDrawer:
         pya.click()
         pya.dragTo(textbox.left + width + int(self.overshoot_width.get()),
                    textbox.top + height + int(self.overshoot_height.get()),
-                   3, pya.easeOutQuad)
+                   int(self.speed.get()), pya.easeOutQuad)
         # set over or under shoot above
         time.sleep(.5)
 
