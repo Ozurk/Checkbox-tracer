@@ -13,7 +13,7 @@ def save_ok_image():
         img = ImageGrab.grabclipboard()
         if isinstance(img, Image.Image):
             # Ask the user where to save the image
-            file_path = 'pics/ok.png'
+            file_path = '../pics/ok.png'
             if file_path:
                 # Save the image to the specified path
                 img.save(file_path)
@@ -32,7 +32,7 @@ def save_target_image():
         img = ImageGrab.grabclipboard()
         if isinstance(img, Image.Image):
             # Ask the user where to save the image
-            file_path = 'pics/target.png'
+            file_path = '../pics/target.png'
             if file_path:
                 # Save the image to the specified path
                 img.save(file_path)
@@ -81,7 +81,7 @@ class TextBoxDrawer:
         self.root.resizable(False, False)
         self.root.title('Build-Ops Form Field creator')
         self.root.iconbitmap("pics/logo.ico")
-        core_logo = Image.open("pics/logo.gif")
+        core_logo = Image.open("../pics/logo.gif")
         core_logo_copy = core_logo
         core_image = ImageTk.PhotoImage(core_logo_copy)
         self.header = tk.Label(self.root, image=core_image, bg="#ffffff")
