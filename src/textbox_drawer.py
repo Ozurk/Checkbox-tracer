@@ -47,16 +47,69 @@ def save_target_image():
 
 def create_help_window():
     help_window = tk.Tk()
-    help_text = tk.Text(help_window, height=50, width=30)
-    header = ""
-    intro = ""
-    section1header = ""
-    section1 = ""
-    section2header = ""
-    section2 = ""
-    section3header = ""
-    section3 = ""
-    help_text.pack()
+    help_window.geometry("800x800")
+    help_frame = tk.Frame(help_window)
+    help_frame.columnconfigure(0, weight=1)
+    help_frame.pack(fill="x")
+    header = tk.Label(help_frame, text="How to use this tool", bg="#84cc34", fg="black",
+                      font=("Times New Roman", 20, "bold"),width=850)
+    header.grid(column=0, row=0, sticky=tk.NW)
+
+    step_1_label = tk.Label(help_frame, text="Step 1", bg="#a8a8a8")
+    step_1_label.grid(column=0, row=1, sticky=tk.NW, padx=15)
+
+    step_1_text = tk.Message(help_frame, text="Begin by setting the zoom of the Build-Ops webpage to where all "
+                                              "fields are in frame, and the window zoomed in as close as possible")
+    step_1_text.grid(column=0, row=2, sticky=tk.NW, padx=15)
+
+    step_2_label = tk.Label(help_frame, text="Step 2", bg="#a8a8a8")
+    step_2_label.grid(column=0, row=3, sticky=tk.NW, padx=15)
+
+    step_2_text = tk.Message(help_frame, text="""	
+Take a screenshot of the empty form field using the snipping tool.
+Start As close as possible to the top left corner of the field, without cropping anything out.
+Drag to the bottom right corner of the field. 
+This tool may take some trial and error to get the edges cropped correctly.
+Copy the image to the clipboard.""", width="850")
+    step_2_text.grid(column=0, row=4, sticky=tk.NW)
+
+    step_3_label = tk.Label(help_frame, text="Step 3", bg="#a8a8a8")
+    step_3_label.grid(column=0, row=5, sticky=tk.NW, padx=15)
+
+    step_3_text = tk.Message(help_frame, text="Click the “Copy Target image from Clipboard” button.")
+    step_3_text.grid(column=0, row=6, sticky=tk.NW)
+
+    step_4_label = tk.Label(help_frame, text="Step 4", bg="#a8a8a8")
+    step_4_label.grid(column=0, row=7, sticky=tk.NW, padx=15)
+
+    step_4_text = tk.Message(help_frame, text="""
+On the Build-Ops webpage, click forms draw a small textbox somewhere and take a screenshot of the blue button using the snipping tool.
+From here click and drag a small textbox somewhere on the screen.
+This will cause a dialog box to appear with some controls on it. 
+take a screenshot of the blue “OK” button.
+Click the “Save Ok Image from Clipboard” button on the application window.""", width="850")
+    step_4_text.grid(column=0, row=8, sticky=tk.NW, padx=10, pady=10)
+
+    step_5_label = tk.Label(help_frame, text="Step 5", bg="#a8a8a8")
+    step_5_label.grid(column=0, row=9, sticky=tk.NW, padx=15)
+
+    step_5_text = tk.Message(help_frame, text="""
+Set the confidence percentage and overshoot distances.
+Confidence is a number between 1 and 100. 
+The higher the confidence, the “pickier” the program is about matching the target photo. 
+If the confidence is set too high, the application will miss fields.
+If the confidence is set too low, the application will add fields where they are not wanted.
+A good starting point is 85.
+Overshoot X and Y are the distances (In pixels) the application overshoots the bottom right corner.
+A higher overshoot width with result in the box being created wider.
+A higher overshoot height will result in a taller box
+The overshoot fields do not affect the starting position. Only the ending position.
+The speed at which the program works can be changed as well. 
+The smaller the number, the faster the textboxes will be created.
+The faster the program runs, the harder it is to stop if it is needed so be careful.
+As the speed increases, the overshoot values will need to be increased.
+""", width="850")
+    step_5_text.grid(column=0, row=10, sticky=tk.NW)
 
 
 class TextBoxDrawer:
@@ -80,7 +133,7 @@ class TextBoxDrawer:
         self.root = tk.Tk()
         self.root.resizable(False, False)
         self.root.title('Build-Ops Form Field creator')
-        self.root.iconbitmap("pics/logo.ico")
+        self.root.iconbitmap("../pics/logo.ico")
         core_logo = Image.open("../pics/logo.gif")
         core_logo_copy = core_logo
         core_image = ImageTk.PhotoImage(core_logo_copy)
@@ -142,7 +195,7 @@ class TextBoxDrawer:
         self.start_button_text_var.set("Start")
         self.start_button = tk.Button(self.main_frame, textvariable=self.start_button_text_var,
                                       command=self.start_textbox_maker,
-                                 font=("Cambria", 20, "bold"), bg="#79B532", borderwidth=7)
+                                      font=("Cambria", 20, "bold"), bg="#79B532", borderwidth=7)
         self.start_button.grid(row=9, column=0, columnspan=2, sticky=tk.NSEW)
         credit_hunter = tk.Label(self.main_frame, text="Created By Hunter Metzger", bg='black', fg='white',
                                  anchor=tk.SW)
@@ -200,11 +253,6 @@ class TextBoxDrawer:
 
         except ValueError:
             messagebox.showinfo("error", "Please fill out all the fields.")
-
-
-
-
-
 
 
 if __name__ == "__main__":
