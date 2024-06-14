@@ -4,7 +4,7 @@ import pyscreeze
 import tkinter as tk
 from tkinter import messagebox, filedialog
 from PIL import Image, ImageTk, ImageGrab
-from tkPDFViewer import tkPDFViewer
+import collections
 
 
 def save_ok_image():
@@ -114,6 +114,7 @@ As the speed increases, the overshoot values will need to be increased.
 
 class TextBoxDrawer:
     def __init__(self):
+        self.start_button_text_var = None
         self.start_button = None
         self.overshoot_height_variable = None
         self.speed_variable = None
@@ -207,26 +208,26 @@ class TextBoxDrawer:
     def create_textbox(self):
         time.sleep(.1)
         all_textboxes = list(
-            pya.locateAllOnScreen("pics/target.png", confidence=int(self.confidence_entry.get()) / 100))
+            pya.locateAllOnScreen("../pics/target.png", confidence=int(self.confidence_entry.get()) / 100))
         textbox = all_textboxes[0]
         height = textbox.height
         width = textbox.width
         overshoot_height = int(self.overshoot_height_entry.get())
         overshoot_width = int(self.overshoot_width_entry.get())
         speed = float(self.speed.get())
-        print(textbox)
+        print(f"Instances of target images on screen = {all_textboxes}")
         pya.moveTo(textbox.left, textbox.top)
         pya.click()
         pya.dragTo(textbox.left + width + int(overshoot_width),
                    textbox.top + height + int(overshoot_height),
                    speed, pya.easeOutQuad)
         # set over or under shoot above
-        pya.moveTo(pya.locateOnScreen("pics/ok.png", confidence=.8))
+        pya.moveTo(pya.locateOnScreen("../pics/ok.png", confidence=.8))
         pya.click()
         time.sleep(.5)
         for textboxes in all_textboxes:
-            print(textboxes)
-            print(overshoot_height, overshoot_width, speed)
+            # print(f"Instances of target images on screen = {len(all_textboxes)}", textbox)
+
             self.create_textbox()
 
     def run_mainloop(self):
@@ -237,16 +238,16 @@ class TextBoxDrawer:
             attempts = 0
             while attempts < 100:
                 if attempts == 99:
-                    pya.scroll(500)
+                    pya.scroll(5000)
                 try:
                     self.create_textbox()
                 except pyscreeze.ImageNotFoundException as e:
                     pya.scroll(-50)
                     attempts += 1
-                    self.start_button_text_var.set(f"Attempt number: {attempts}")
+                    self.start_button_text_var.set(f"looking for target image: attempt number: {attempts}")
                     self.start_button.update()
                 except pya.ImageNotFoundException as e:
-                    self.start_button_text_var.set(f"Attempt number: {attempts}")
+                    self.start_button_text_var.set(f"looking for target image: attempt number: {attempts}")
                     self.start_button.update()
                     pya.scroll(-50)
                     attempts += 1
